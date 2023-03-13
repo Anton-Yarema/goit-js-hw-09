@@ -10,7 +10,7 @@ const ref = {
 const STORAGE_KEY = 'feedback-form-state';
 
 function createPromise(position, delay) {
-  return new Promise((resolve, reject) => { 
+  return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
     setTimeout(() => {
       if (shouldResolve) {
@@ -19,7 +19,7 @@ function createPromise(position, delay) {
         reject({ position, delay });
       }
     }, delay);
-  })
+  });
 }
 
 ref.form.addEventListener('input', onFormInput);
@@ -44,15 +44,19 @@ function onFormSubmit(e) {
   const stepValue = parseInt(step.value);
   const amountValue = parseInt(amount.value);
 
-  for (let i = 0; i < amountValue; i += 1) {    
+  for (let i = 0; i < amountValue; i += 1) {
     const delay = i * stepValue + delayValue;
     createPromise(i, delay)
-    .then(({ position, delay }) => {
-    Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-  });
+      .then(({ position, delay }) => {
+        Notiflix.Notify.success(
+          `✅ Fulfilled promise ${position} in ${delay}ms`
+        );
+      })
+      .catch(({ position, delay }) => {
+        Notiflix.Notify.failure(
+          `❌ Rejected promise ${position} in ${delay}ms`
+        );
+      });
   }
   e.currentTarget.reset();
 }

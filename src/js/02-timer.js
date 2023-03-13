@@ -24,7 +24,7 @@ const options = {
       Notiflix.Notify.failure("Please choose a date in the future");
       document.querySelector('[data-start]').disabled = true;
     } else {
-      Notiflix.Notify.success('Sol lucet omnibus');
+      Notiflix.Notify.success('Timer Start');
       document.querySelector('[data-start]').disabled = false;
     }
     const timer = {
