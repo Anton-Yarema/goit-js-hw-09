@@ -11,7 +11,7 @@ const ref = {
   seconds: document.querySelector('[data-seconds]'),
 };
 
-
+ref.button.disabled = true;
 
 const options = {
   enableTime: true,
@@ -20,33 +20,43 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     const selectedDate = selectedDates[0];
+
     if (selectedDate.getTime() <= Date.now()) {
-      Notiflix.Notify.failure("Please choose a date in the future");
-      document.querySelector('[data-start]').disabled = true;
+      Notiflix.Notify.failure('Please choose a date in the future');
+      ref.button.disabled = true;
     } else {
       Notiflix.Notify.success('Timer Start');
-      document.querySelector('[data-start]').disabled = false;
+      ref.button.disabled = false;
     }
-    const timer = {
-      start() {
-        const startTime = Date.now();
+    ref.button.addEventListener('click', () => {
+      const timer = {
+        start() {
+          const startTime = Date.now();
+          ref.button.disabled = true;
 
-        setInterval(() => {
-          const currentTime = Date.now();
-          const deltaTime = selectedDate.getTime() - currentTime;
-          const time = convertMs(deltaTime);
-          onCountdownChange(time);          
-        }, 1000);
-      },
-    };
-    timer.start();
+          setInterval(() => {
+            const currentTime = Date.now();
+            const deltaTime = selectedDate.getTime() - currentTime;
+            const time = convertMs(deltaTime);
+            onCountdownChange(time);
+          }, 1000);
+        },
+      };
+      timer.start();
+    });
   },
 };
 
 flatpickr(ref.textInput, options);
 
+
 function onCountdownChange(params) {
-   if (params.days <= 0 && params.hours <= 0 && params.minutes <= 0 && params.seconds <= 0) {
+  if (
+    params.days <= 0 &&
+    params.hours <= 0 &&
+    params.minutes <= 0 &&
+    params.seconds <= 0
+  ) {
     ref.days.textContent = '00';
     ref.hours.textContent = '00';
     ref.minutes.textContent = '00';
@@ -58,7 +68,6 @@ function onCountdownChange(params) {
   ref.minutes.textContent = params.minutes;
   ref.seconds.textContent = params.seconds;
 }
-
 
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
